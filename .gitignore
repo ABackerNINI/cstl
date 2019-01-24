@@ -1,3 +1,6 @@
+#Vs2017 temp files
+.vs
+
 # Prerequisites
 *.d
 
