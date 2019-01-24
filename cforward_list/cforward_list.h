@@ -13,16 +13,19 @@ extern "C" {
 
     //cforward_list_node
     typedef struct _cforward_list_node {
-        struct _cforward_list_node *next;//next.
-        char data;//data holder,but it's not really char type,but depending on the data_size,cast to the real type you need like '*(foo *)&data'.
+        //next
+        struct _cforward_list_node *next;
+        //data holder,it's not really char type,but depending on the data_size
+        //cast to the real type you need like '*(foo *)&data'
+        char data;
     }cforward_list_node;
 
     //cforward_list
     typedef struct _cforward_list {
-        cforward_list_node *head;//the first node,keep NULL while size is zero.
-        cforward_list_node *tail;//the last node,indeterminate while size is zero.
-        CSIZE_T size;//number of nodes.
-        CSIZE_T data_size;//real size of the data holder.
+        cforward_list_node *head;//the first node,keep NULL while size is zero
+        cforward_list_node *tail;//the last node,indeterminate while size is zero
+        CSIZE_T size;//number of nodes
+        CSIZE_T data_size;//real size of the data holder
     }cforward_list;
 
 
@@ -38,7 +41,7 @@ extern "C" {
     }
 
     //cforward_list_free
-    //free all nodes,[head] will be set to NULL,[tail] and [size] are indeterminate.
+    //free all nodes,[head] will be set to NULL,[tail] and [size] are indeterminate
     inline void cforward_list_free(cforward_list *list) {
         cforward_list_node *tmp;
 
@@ -53,7 +56,7 @@ extern "C" {
     }
 
 
-    /** functions **/
+    /** basic functions -1 **/
 
 
     //cforward_list_swap
@@ -83,7 +86,7 @@ extern "C" {
     }
 
 
-    /** push_back/push_front/pop_front/insert_after/erase_after functions **/
+    /** basic functions -2 **/
 
 
     //cforward_list_push_back
@@ -157,10 +160,6 @@ extern "C" {
         --list->size;
     }
 
-
-    /** extension functions **/
-
-
     void cforward_list_remove();
     void cforward_list_remove_if();
     void cforward_list_unique();
@@ -169,6 +168,10 @@ extern "C" {
     void cforward_list_reverse();
     void cforward_list_copy();
     void cforward_list_resize();
+
+
+    /** extension functions **/
+
 
     //not recommended
     //void clist_pop_back(cforward_list *list);

@@ -3,8 +3,7 @@
 #ifndef _CSTL_CSTRING_H_
 #define _CSTL_CSTRING_H_
 
-
-#include <stdlib.h>//malloc,realloc
+#include <stdlib.h>//malloc,free,realloc,NULL
 #include <string.h>//memcpy,strcmp,strncmp
 
 #define CSIZE_T unsigned int//size_t
@@ -62,7 +61,7 @@ extern "C" {
     }
 
 
-    /** functions **/
+    /** basic functions -1 **/
 
 
     //cstring_reserve
@@ -137,7 +136,7 @@ extern "C" {
     }
 
 
-    /** push_back/pop_back/insert/erase/replace/find/compare functions **/
+    /** basic functions -2 **/
 
 
     //cstring_push_back_char
