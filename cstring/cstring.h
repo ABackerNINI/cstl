@@ -7,7 +7,7 @@
 #include <stdlib.h>//malloc,realloc
 #include <string.h>//memcpy,strcmp,strncmp
 
-#define SIZE_T unsigned int//size_t
+#define CSIZE_T unsigned int//size_t
 
 #ifdef __cplusplus
 extern "C" {
@@ -15,8 +15,8 @@ extern "C" {
 
     //struct cstring
     typedef struct _cstring {
-        SIZE_T size;//length of the string
-        SIZE_T capacity;//capacity of data,usually equ to size + 1(reserve for '\0')
+        CSIZE_T size;//length of the string
+        CSIZE_T capacity;//capacity of data,usually equ to size + 1(reserve for '\0')
         char *data;//it is not always '\0' at the end of the string,call cstring_c_str() to append '\0'
     }cstring;
 
@@ -32,14 +32,14 @@ extern "C" {
     }
 
     //cstring_init_by_capacity
-    inline void cstring_init_by_capacity(cstring *s, SIZE_T capacity) {
+    inline void cstring_init_by_capacity(cstring *s, CSIZE_T capacity) {
         s->size = 0;
         s->capacity = capacity + 1;
         s->data = (char *)malloc(sizeof(char)*s->capacity);
     }
 
     //cstring_init_by_substr
-    inline void cstring_init_by_substr(cstring *s, const char *str, SIZE_T begin, SIZE_T n) {
+    inline void cstring_init_by_substr(cstring *s, const char *str, CSIZE_T begin, CSIZE_T n) {
         s->size = n;
         s->capacity = n + 1;
         s->data = (char *)malloc(sizeof(char)*s->capacity);
@@ -47,13 +47,13 @@ extern "C" {
     }
 
     //cstring_init_by_cstr_n
-    inline void cstring_init_by_cstr_n(cstring *s, const char *str, SIZE_T n) {
+    inline void cstring_init_by_cstr_n(cstring *s, const char *str, CSIZE_T n) {
         cstring_init_by_substr(s, str, 0, n);
     }
 
     //cstring_init_by_cstr
     inline void cstring_init_by_cstr(cstring *s, const char *str) {
-        cstring_init_by_cstr_n(s, str, (SIZE_T)strlen(str));
+        cstring_init_by_cstr_n(s, str, (CSIZE_T)strlen(str));
     }
 
     //cstring_free
@@ -66,7 +66,7 @@ extern "C" {
 
 
     //cstring_reserve
-    inline void cstring_reserve(cstring *s, SIZE_T n) {
+    inline void cstring_reserve(cstring *s, CSIZE_T n) {
         if (s->capacity < n + 1) {
             s->capacity = n + 1;
             s->data = (char *)realloc(s->data, sizeof(char)*s->capacity);
@@ -98,26 +98,26 @@ extern "C" {
 
     //cstring_substr
     //remember to call cstring_free,do NOT use as an intermediate variable
-    inline cstring cstring_substr(cstring *s, SIZE_T begin, SIZE_T n) {
+    inline cstring cstring_substr(cstring *s, CSIZE_T begin, CSIZE_T n) {
         cstring tmp;
         cstring_init_by_substr(&tmp, s->data, begin, n);
         return tmp;
     }
 
     //cstring_swap
-    inline void cstring_swap(cstring *s, SIZE_T n1, SIZE_T n2) {
+    inline void cstring_swap(cstring *s, CSIZE_T n1, CSIZE_T n2) {
         char c = s->data[n1];
         s->data[n1] = s->data[n2];
         s->data[n2] = c;
     }
 
     //cstring_at
-    inline char cstring_at(cstring *s, SIZE_T n) {
+    inline char cstring_at(cstring *s, CSIZE_T n) {
         return s->data[n];
     }
 
     //cstring_size
-    inline SIZE_T cstring_size(cstring *s) {
+    inline CSIZE_T cstring_size(cstring *s) {
         return s->size;
     }
 
@@ -127,7 +127,7 @@ extern "C" {
     }
 
     //cstring_capacity
-    inline SIZE_T cstring_capacity(cstring *s) {
+    inline CSIZE_T cstring_capacity(cstring *s) {
         return s->capacity;
     }
 
@@ -148,22 +148,22 @@ extern "C" {
     }
 
     //cstring_push_back_substr
-    inline void cstring_push_back_substr(cstring *s, const char *str, SIZE_T begin, SIZE_T n) {
+    inline void cstring_push_back_substr(cstring *s, const char *str, CSIZE_T begin, CSIZE_T n) {
         cstring_reserve(s, s->size + n);
         memcpy(s->data + s->size, str + begin, sizeof(char)*n);
         s->size += n;
     }
 
     //cstring_pop_back_n
-    inline void cstring_pop_back_n(cstring *s, SIZE_T n) {
+    inline void cstring_pop_back_n(cstring *s, CSIZE_T n) {
         s->size -= n;
     }
 
     //cstring_insert_char
-    inline void cstring_insert_char(cstring *s, SIZE_T pos, char c) {
+    inline void cstring_insert_char(cstring *s, CSIZE_T pos, char c) {
         cstring_reserve(s, s->size + 1);
         //memcpy(s->data + pos + 1, s->data + pos, sizeof(char)*(s->size - pos));
-        SIZE_T i, l = pos + 1;
+        CSIZE_T i, l = pos + 1;
         for (i = s->size + 1; i >= l; --i) {
             s->data[i] = s->data[i - 1];
         }
@@ -172,10 +172,10 @@ extern "C" {
     }
 
     //cstring_insert_substr
-    inline void cstring_insert_substr(cstring *s, SIZE_T pos, const char *str, SIZE_T begin, SIZE_T n) {
+    inline void cstring_insert_substr(cstring *s, CSIZE_T pos, const char *str, CSIZE_T begin, CSIZE_T n) {
         cstring_reserve(s, s->size + n);
         //memcpy(s->data + pos + n, s->data + pos, sizeof(char)*(s->size - pos));
-        SIZE_T i, l = pos + n;
+        CSIZE_T i, l = pos + n;
         for (i = s->size + n; i >= l; --i) {
             s->data[i] = s->data[i - n];
         }
@@ -184,26 +184,26 @@ extern "C" {
     }
 
     //cstring_erase
-    inline void cstring_erase(cstring *s, SIZE_T begin, SIZE_T n) {
+    inline void cstring_erase(cstring *s, CSIZE_T begin, CSIZE_T n) {
         memcpy(s->data + begin, s->data + begin + n, sizeof(char)*(s->size - begin - n));
         s->size -= n;
     }
 
     //cstring_replace_by_char
-    inline void cstring_replace_by_char(cstring *s, SIZE_T begin, SIZE_T n, char c) {
-        SIZE_T i, r = begin + n;
+    inline void cstring_replace_by_char(cstring *s, CSIZE_T begin, CSIZE_T n, char c) {
+        CSIZE_T i, r = begin + n;
         for (i = begin; i < r; ++i) {
             s->data[i] = c;
         }
     }
 
     //cstring_replace_by_substr
-    inline void cstring_replace_by_substr(cstring *s, SIZE_T begin1, SIZE_T n1, const char *str, SIZE_T begin2, SIZE_T n2) {
+    inline void cstring_replace_by_substr(cstring *s, CSIZE_T begin1, CSIZE_T n1, const char *str, CSIZE_T begin2, CSIZE_T n2) {
         cstring_reserve(s, s->size - n1 + n2);
         //memcpy(s->data + begin1 + n1, s->data + begin1 + n2, sizeof(char)*(s->size - begin1 - n2));
         if (n1 < n2) {
-            SIZE_T k = n2 - n1;
-            SIZE_T i, l = begin1 + k;
+            CSIZE_T k = n2 - n1;
+            CSIZE_T i, l = begin1 + k;
             for (i = s->size + k; i >= l; --i) {
                 s->data[i] = s->data[i - k];
             }
@@ -219,7 +219,7 @@ extern "C" {
 
     //cstring_find_char
     inline int cstring_find_char(cstring *s, char c) {
-        SIZE_T i;
+        CSIZE_T i;
         for (i = 0; i < s->size; ++i) {
             if (s->data[i] == c) {
                 return i;
@@ -229,8 +229,8 @@ extern "C" {
     }
 
     //cstring_substr_find_substr
-    inline int cstring_substr_find_substr(cstring *s, SIZE_T begin1, SIZE_T n1, const char *str, SIZE_T begin2, SIZE_T n2) {
-        SIZE_T i, j, f, r = begin1 + n1 - n2;
+    inline int cstring_substr_find_substr(cstring *s, CSIZE_T begin1, CSIZE_T n1, const char *str, CSIZE_T begin2, CSIZE_T n2) {
+        CSIZE_T i, j, f, r = begin1 + n1 - n2;
         for (i = begin1; i < r; ++i) {
             f = 1;
             for (j = 0; j < n2; ++j) {
@@ -245,7 +245,7 @@ extern "C" {
     }
 
     //cstring_compare_substr_with_substr
-    inline int cstring_compare_substr_with_substr(cstring *s, SIZE_T begin1, SIZE_T n1, const char *str, SIZE_T begin2, SIZE_T n2) {
+    inline int cstring_compare_substr_with_substr(cstring *s, CSIZE_T begin1, CSIZE_T n1, const char *str, CSIZE_T begin2, CSIZE_T n2) {
         const char *str1 = cstring_c_str(s);
         return strncmp(str1 + begin1, str + begin2, n1 < n2 ? n1 : n2);
     }
@@ -255,48 +255,48 @@ extern "C" {
 
 
     //cstring_push_back_cstr_n
-    inline void cstring_push_back_cstr_n(cstring *s, const char *str, SIZE_T n) {
+    inline void cstring_push_back_cstr_n(cstring *s, const char *str, CSIZE_T n) {
         cstring_push_back_substr(s, str, 0, n);
     }
 
     //cstring_push_back_cstr
     inline void cstring_push_back_cstr(cstring *s, const char *str) {
-        cstring_push_back_cstr_n(s, str, (SIZE_T)strlen(str));
+        cstring_push_back_cstr_n(s, str, (CSIZE_T)strlen(str));
     }
 
     //cstring_insert_cstr_n
-    inline void cstring_insert_cstr_n(cstring *s, SIZE_T pos, const char *str, SIZE_T n) {
+    inline void cstring_insert_cstr_n(cstring *s, CSIZE_T pos, const char *str, CSIZE_T n) {
         cstring_insert_substr(s, pos, str, 0, n);
     }
 
     //cstring_insert_cstr
-    inline void cstring_insert_cstr(cstring *s, SIZE_T pos, const char *str) {
-        cstring_insert_cstr_n(s, pos, str, (SIZE_T)strlen(str));
+    inline void cstring_insert_cstr(cstring *s, CSIZE_T pos, const char *str) {
+        cstring_insert_cstr_n(s, pos, str, (CSIZE_T)strlen(str));
     }
 
     //cstring_replace_by_cstr_n
-    inline void cstring_replace_by_cstr_n(cstring *s, SIZE_T begin1, SIZE_T n1, const char *str, SIZE_T n2) {
+    inline void cstring_replace_by_cstr_n(cstring *s, CSIZE_T begin1, CSIZE_T n1, const char *str, CSIZE_T n2) {
         cstring_replace_by_substr(s, begin1, n1, str, 0, n2);
     }
 
     //cstring_replace_by_cstr
-    inline void cstring_replace_by_cstr(cstring *s, SIZE_T begin1, SIZE_T n1, const char *str) {
-        cstring_replace_by_cstr_n(s, begin1, n1, str, (SIZE_T)strlen(str));
+    inline void cstring_replace_by_cstr(cstring *s, CSIZE_T begin1, CSIZE_T n1, const char *str) {
+        cstring_replace_by_cstr_n(s, begin1, n1, str, (CSIZE_T)strlen(str));
     }
 
     //cstring_find_substr
-    inline int cstring_find_substr(cstring *s, const char *str, SIZE_T begin2, SIZE_T n2) {
+    inline int cstring_find_substr(cstring *s, const char *str, CSIZE_T begin2, CSIZE_T n2) {
         return cstring_substr_find_substr(s, 0, s->size, str, begin2, n2);
     }
 
     //cstring_find_cstr_n
-    inline int cstring_find_cstr_n(cstring *s, const char *str, SIZE_T n2) {
+    inline int cstring_find_cstr_n(cstring *s, const char *str, CSIZE_T n2) {
         return cstring_find_substr(s, str, 0, n2);
     }
 
     //cstring_find_cstr
     inline int cstring_find_cstr(cstring *s, const char *str) {
-        return cstring_find_cstr_n(s, str, (SIZE_T)strlen(str));
+        return cstring_find_cstr_n(s, str, (CSIZE_T)strlen(str));
     }
 
     //cstring_find
@@ -305,28 +305,28 @@ extern "C" {
     }
 
     //cstring_compare_substr_with_cstr_n
-    inline int cstring_compare_substr_with_cstr_n(cstring *s, SIZE_T begin1, SIZE_T n1, const char *str, SIZE_T n2) {
+    inline int cstring_compare_substr_with_cstr_n(cstring *s, CSIZE_T begin1, CSIZE_T n1, const char *str, CSIZE_T n2) {
         return cstring_compare_substr_with_substr(s, begin1, n1, str, 0, n2);
     }
 
     //cstring_compare_substr_with_cstr
-    inline int cstring_compare_substr_with_cstr(cstring *s, SIZE_T begin1, SIZE_T n1, const char *str) {
-        return cstring_compare_substr_with_cstr_n(s, begin1, n1, str, (SIZE_T)strlen(str));
+    inline int cstring_compare_substr_with_cstr(cstring *s, CSIZE_T begin1, CSIZE_T n1, const char *str) {
+        return cstring_compare_substr_with_cstr_n(s, begin1, n1, str, (CSIZE_T)strlen(str));
     }
 
     //cstring_compare_with_substr
-    inline int cstring_compare_with_substr(cstring *s, const char *str, SIZE_T begin2, SIZE_T n2) {
+    inline int cstring_compare_with_substr(cstring *s, const char *str, CSIZE_T begin2, CSIZE_T n2) {
         return cstring_compare_substr_with_substr(s, 0, s->size, str, begin2, n2);
     }
 
     //cstring_compare_with_cstr_n
-    inline int cstring_compare_with_cstr_n(cstring *s, const char *str, SIZE_T n2) {
+    inline int cstring_compare_with_cstr_n(cstring *s, const char *str, CSIZE_T n2) {
         return cstring_compare_with_substr(s, str, 0, n2);
     }
 
     //cstring_compare_with_cstr
     inline int cstring_compare_with_cstr(cstring *s, const char *str) {
-        return cstring_compare_with_cstr_n(s, str, (SIZE_T)strlen(str));
+        return cstring_compare_with_cstr_n(s, str, (CSIZE_T)strlen(str));
     }
 
     //cstring_compare
