@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef _STL_CSTRING_H_
-#define _STL_CSTRING_H_
+#ifndef _CSTL_CSTRING_H_
+#define _CSTL_CSTRING_H_
 
 
 #include <stdlib.h>//malloc,realloc
@@ -340,4 +340,4 @@ extern "C" {
 }
 #endif
 
-#endif//_STL_CSTRING_H_
+#endif//_CSTL_CSTRING_H_
