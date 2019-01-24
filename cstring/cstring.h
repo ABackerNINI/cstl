@@ -14,9 +14,12 @@ extern "C" {
 
     //struct cstring
     typedef struct _cstring {
-        CSIZE_T size;//length of the string
-        CSIZE_T capacity;//capacity of data,usually equ to size + 1(reserve for '\0')
-        char *data;//it is not always '\0' at the end of the string,call cstring_c_str() to append '\0'
+        //length of the string
+        CSIZE_T size;
+        //capacity of data holder,usually equ to size + 1(reserve for '\0')
+        CSIZE_T capacity;
+        //data holder,it is not always '\0' at the end of the string,call cstring_c_str() to append '\0'
+        char *data;
     }cstring;
 
 

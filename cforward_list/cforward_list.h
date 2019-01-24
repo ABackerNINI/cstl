@@ -22,10 +22,14 @@ extern "C" {
 
     //cforward_list
     typedef struct _cforward_list {
-        cforward_list_node *head;//the first node,keep NULL while size is zero
-        cforward_list_node *tail;//the last node,indeterminate while size is zero
-        CSIZE_T size;//number of nodes
-        CSIZE_T data_size;//real size of the data holder
+        //the first node,keep NULL while size is zero
+        cforward_list_node *head;
+        //the last node,indeterminate while size is zero
+        cforward_list_node *tail;
+        //number of nodes
+        CSIZE_T size;
+        //real size of the data holder
+        CSIZE_T data_size;
     }cforward_list;
 
 
