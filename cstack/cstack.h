@@ -52,6 +52,7 @@ extern "C" {
     /** basic functions -1 **/
 
 
+    //cstack_reserve
     inline void cstack_reserve(cstack *stack, CSIZE_T n) {
         if (stack->capacity < n) {
             stack->capacity = n;
