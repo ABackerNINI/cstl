@@ -52,6 +52,13 @@ extern "C" {
     /** basic functions -1 **/
 
 
+    inline void cstack_reserve(cstack *stack, CSIZE_T n) {
+        if (stack->capacity < n) {
+            stack->capacity = n;
+            stack->data = realloc(stack->data, stack->data_size*stack->capacity);
+        }
+    }
+
     //cstack_increase_capacity
     inline void cstack_increase_capacity(cstack *stack) {
         if (stack->capacity == 0)stack->capacity = 1;
@@ -113,7 +120,7 @@ extern "C" {
     }
 
 #ifdef __cplusplus
-}
+    }
 #endif
 
 #endif//_CSTL_CSTACK_H_
