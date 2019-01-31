@@ -23,7 +23,7 @@ extern "C" {
     }cstring;
 
 
-    /** init/free functions **/
+    /** Init/free functions **/
 
 
     //cstring_init
@@ -64,7 +64,7 @@ extern "C" {
     }
 
 
-    /** basic functions -1 **/
+    /** Capacity functions **/
 
 
     //cstring_reserve
@@ -84,48 +84,9 @@ extern "C" {
         }
     }
 
-    //cstring_c_str
-    inline char *cstring_c_str(cstring *s) {
-        s->data[s->size] = '\0';
-        return s->data;
-    }
-
-    //cstring_copy
-    inline cstring cstring_copy(cstring *s) {
-        cstring tmp;
-        //cstring_init_by_cstr(&tmp, cstring_c_str(s), s->size);
-        cstring_init_by_substr(&tmp, s->data, 0, s->size);
-        return tmp;
-    }
-
-    //cstring_substr
-    //remember to call cstring_free,do NOT use as an intermediate variable
-    inline cstring cstring_substr(cstring *s, CSIZE_T begin, CSIZE_T n) {
-        cstring tmp;
-        cstring_init_by_substr(&tmp, s->data, begin, n);
-        return tmp;
-    }
-
-    //cstring_swap
-    inline void cstring_swap(cstring *s, CSIZE_T n1, CSIZE_T n2) {
-        char c = s->data[n1];
-        s->data[n1] = s->data[n2];
-        s->data[n2] = c;
-    }
-
-    //cstring_at
-    inline char cstring_at(cstring *s, CSIZE_T n) {
-        return s->data[n];
-    }
-
     //cstring_size
     inline CSIZE_T cstring_size(cstring *s) {
         return s->size;
-    }
-
-    //cstring_empty
-    inline int cstring_empty(cstring *s) {
-        return s->size == 0;
     }
 
     //cstring_capacity
@@ -133,13 +94,32 @@ extern "C" {
         return s->capacity;
     }
 
-    //cstring_clear
-    inline void cstring_clear(cstring *s) {
-        s->size = 0;
+    //cstring_empty
+    inline int cstring_empty(cstring *s) {
+        return s->size == 0;
     }
 
 
-    /** basic functions -2 **/
+    /** Element access functions **/
+
+
+    //cstring_at
+    inline char cstring_at(cstring *s, CSIZE_T n) {
+        return s->data[n];
+    }
+
+    //cstring_front
+    inline char cstring_front(cstring *s) {
+        return s->data[0];
+    }
+
+    //cstring_back
+    inline char cstring_back(cstring *s) {
+        return s->data[s->size - 1];
+    }
+
+
+    /** Modifier functions **/
 
 
     //cstring_push_back_char
@@ -217,6 +197,45 @@ extern "C" {
         s->size = s->size - n1 + n2;
     }
 
+    //cstring_swap_char
+    inline void cstring_swap_char(cstring *s, CSIZE_T n1, CSIZE_T n2) {
+        char c = s->data[n1];
+        s->data[n1] = s->data[n2];
+        s->data[n2] = c;
+    }
+
+    //cstring_clear
+    inline void cstring_clear(cstring *s) {
+        s->size = 0;
+    }
+
+
+    /** Operation functions **/
+
+
+    //cstring_c_str
+    inline char *cstring_c_str(cstring *s) {
+        s->data[s->size] = '\0';
+        return s->data;
+    }
+
+    //cstring_copy
+    inline cstring cstring_copy(cstring *s) {
+        cstring tmp;
+        //cstring_init_by_cstr(&tmp, cstring_c_str(s), s->size);
+        cstring_init_by_substr(&tmp, s->data, 0, s->size);
+        return tmp;
+    }
+
+    //cstring_substr
+    //remember to call cstring_free,do NOT use as an intermediate variable
+    inline cstring cstring_substr(cstring *s, CSIZE_T begin, CSIZE_T n) {
+        cstring tmp;
+        cstring_init_by_substr(&tmp, s->data, begin, n);
+        return tmp;
+    }
+
+    //cstring_rfind
     inline int cstring_rfind();
 
     //cstring_find_char
@@ -253,8 +272,18 @@ extern "C" {
     }
 
 
-    /** extension functions **/
+    /** Extension functions **/
 
+
+    //cstring_swap
+    inline void cstring_swap(cstring *s1, cstring *s2) {
+        //if (s1 != s2) {
+        cstring tmp;
+        tmp = *s1;
+        *s1 = *s2;
+        *s2 = tmp;
+        //}
+    }
 
     //cstring_push_back_cstr_n
     inline void cstring_push_back_cstr_n(cstring *s, const char *str, CSIZE_T n) {

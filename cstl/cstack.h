@@ -24,7 +24,7 @@ extern "C" {
     }cstack;
 
 
-    /** init/free functions **/
+    /** Init/free functions **/
 
 
     //cstack_init
@@ -49,8 +49,17 @@ extern "C" {
     }
 
 
-    /** basic functions -1 **/
+    /** Capacity functions **/
 
+
+    //cstack_increase_capacity
+    inline void _cstack_increase_capacity(cstack *stack) {
+        if (stack->capacity == 0)stack->capacity = 1;
+        else if (stack->capacity == 1)stack->capacity = 2;
+        else stack->capacity = stack->capacity + stack->capacity / 2;
+
+        stack->data = realloc(stack->data, stack->data_size*stack->capacity);
+    }
 
     //cstack_reserve
     inline void cstack_reserve(cstack *stack, CSIZE_T n) {
@@ -60,13 +69,8 @@ extern "C" {
         }
     }
 
-    //cstack_increase_capacity
-    inline void cstack_increase_capacity(cstack *stack) {
-        if (stack->capacity == 0)stack->capacity = 1;
-        else if (stack->capacity == 1)stack->capacity = 2;
-        else stack->capacity = stack->capacity + stack->capacity / 2;
+    inline void cstack_shrink_to_fit(cstack *stack) {
 
-        stack->data = realloc(stack->data, stack->data_size*stack->capacity);
     }
 
     //cstack_size
@@ -74,28 +78,32 @@ extern "C" {
         return stack->size;
     }
 
-    //cstack_empty
-    inline int cstack_empty(cstack *stack) {
-        return stack->size == 0;
-    }
-
     //cstack_capacity
     inline CSIZE_T cstack_capacity(cstack *stack) {
         return stack->capacity;
     }
 
-    //cstack_clear
-    inline void cstack_clear(cstack *stack) {
-        stack->size = 0;
+    //cstack_empty
+    inline int cstack_empty(cstack *stack) {
+        return stack->size == 0;
     }
 
 
-    /** basic functions -2 **/
+    /** Element access functions **/
+
+
+    //cstack_top
+    inline void *cstack_top(cstack *stack) {
+        return (void *)((char *)stack->data + (stack->data_size*(stack->size - 1)));
+    }
+
+
+    /** Modifier functions **/
 
 
     //cstack_push
     inline void *cstack_push(cstack *stack) {
-        if (stack->size == stack->capacity)cstack_increase_capacity(stack);
+        if (stack->size == stack->capacity)_cstack_increase_capacity(stack);
         return (void *)((char *)stack->data + (stack->data_size*stack->size++));
     }
 
@@ -104,24 +112,26 @@ extern "C" {
         return (void *)((char *)stack->data + (stack->data_size*(--stack->size)));
     }
 
-    //cstack_top
-    inline void *cstack_top(cstack *stack) {
-        return (void *)((char *)stack->data + (stack->data_size*(stack->size - 1)));
+    //cstack_clear
+    inline void cstack_clear(cstack *stack) {
+        stack->size = 0;
     }
 
 
-    /** extension functions **/
+    /** Extension functions **/
 
 
     //cstack_swap
     inline void cstack_swap(cstack *stack1, cstack *stack2) {
+        //if (stack1 != stack2) {
         cstack tmp = *stack1;
         *stack1 = *stack2;
         *stack2 = tmp;
+        //}
     }
 
 #ifdef __cplusplus
-    }
+}
 #endif
 
 #endif//_CSTL_CSTACK_H_

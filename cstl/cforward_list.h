@@ -33,7 +33,7 @@ extern "C" {
     }cforward_list;
 
 
-    /** init/free functions **/
+    /** Init/free functions **/
 
 
     //cforward_list_init
@@ -60,24 +60,8 @@ extern "C" {
     }
 
 
-    /** basic functions -1 **/
+    /** Capacity functions **/
 
-
-    //cforward_list_swap
-    inline void cforward_list_swap(cforward_list_node *node1, cforward_list_node *node2) {
-        if (node1 != node2) {
-            cforward_list_node tmp = *node1;
-            *node1 = *node2;
-            *node2 = tmp;
-        }
-    }
-
-    //cforward_list_clear
-    //free all nodes
-    inline void cforward_list_clear(cforward_list *list) {
-        cforward_list_free(list);
-        list->size = 0;
-    }
 
     //cforward_list_size
     inline CSIZE_T cforward_list_size(cforward_list *list) {
@@ -90,8 +74,29 @@ extern "C" {
     }
 
 
-    /** basic functions -2 **/
+    /** Element access functions **/
 
+
+    inline void *cforward_list_front();
+    inline void *cforward_list_back();
+
+
+    /** Modifier functions **/
+
+
+    //cforward_list_push_front
+    inline void *cforward_list_push_front(cforward_list *list) {
+        cforward_list_node *new_node = malloc(sizeof(struct _cforward_list_node *) + list->data_size);
+        new_node->next = list->head;
+        if (list->head == NULL) {
+            list->tail = new_node;
+        }
+        list->head = new_node;
+
+        ++list->size;
+
+        return &(new_node->data);
+    }
 
     //cforward_list_push_back
     inline void *cforward_list_push_back(cforward_list *list) {
@@ -103,20 +108,6 @@ extern "C" {
             list->tail->next = new_node;
             list->tail = new_node;
         }
-        ++list->size;
-
-        return &(new_node->data);
-    }
-
-    //cforward_list_push_front
-    inline void *cforward_list_push_front(cforward_list *list) {
-        cforward_list_node *new_node = malloc(sizeof(struct _cforward_list_node *) + list->data_size);
-        new_node->next = list->head;
-        if (list->head == NULL) {
-            list->tail = new_node;
-        }
-        list->head = new_node;
-
         ++list->size;
 
         return &(new_node->data);
@@ -164,17 +155,43 @@ extern "C" {
         --list->size;
     }
 
-    void cforward_list_remove();
-    void cforward_list_remove_if();
-    void cforward_list_unique();
-    void cforward_list_merge();
-    void cforward_list_sort();
-    void cforward_list_reverse();
-    void cforward_list_copy();
-    void cforward_list_resize();
+    //cforward_list_swap_node
+    inline void cforward_list_swap_node(cforward_list_node *node1, cforward_list_node *node2) {
+        if (node1 != node2) {
+            cforward_list_node tmp = *node1;
+            *node1 = *node2;
+            *node2 = tmp;
+        }
+    }
+
+    inline void cforward_list_remove();
+    inline void cforward_list_remove_if();
+    inline void cforward_list_unique();
+    inline void cforward_list_sort();
+    inline void cforward_list_reverse();
+    inline void cforward_list_resize();
+
+    //cforward_list_clear
+    //free all nodes
+    inline void cforward_list_clear(cforward_list *list) {
+        cforward_list_free(list);
+        list->size = 0;
+    }
+
+    inline void cforward_list_copy();
+    inline void cforward_list_merge();
 
 
     /** extension functions **/
+
+    inline void cforward_list_swap(cforward_list *list1, cforward_list *list2) {
+        if (list1 != list2) {
+            cforward_list tmp;
+            tmp = *list1;
+            *list1 = *list2;
+            *list2 = tmp;
+        }
+    }
 
 
     //not recommended
