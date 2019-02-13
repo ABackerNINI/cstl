@@ -78,9 +78,11 @@ extern "C" {
     //cstring_shrink_to_fit
     inline void cstring_shrink_to_fit(cstring *s) {
         if (s->size < s->capacity) {
-            char *tmp = (char *)malloc(sizeof(char)*(s->size + 1));
-            memcpy(tmp, s->data, sizeof(char)*s->size);
-            s->data = tmp;
+            s->capacity = s->size + 1;
+            //char *tmp = (char *)malloc(sizeof(char)*(s->capacity));
+            //memcpy(tmp, s->data, sizeof(char)*s->size);
+            //s->data = tmp;
+            s->data = realloc(s->data, sizeof(char)*(s->capacity));
         }
     }
 
@@ -368,7 +370,7 @@ extern "C" {
     }
 
 #ifdef __cplusplus
-}
+    }
 #endif
 
 #endif//_CSTL_CSTRING_H_
